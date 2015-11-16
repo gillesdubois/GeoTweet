@@ -228,17 +228,18 @@ def search_zone_map():
         printout("[TWEET:] ", YELLOW)
         print " " + tweet.text.encode('utf-8')
         printout("[GEOLOCATION:]   ", MAGENTA)
-        print tweet.geo['coordinates']
-        location = geolocator.reverse(tweet.geo['coordinates'],timeout=20)
-        printout("[ADDRESS:]   ", CYAN)
-        print location.address.encode('utf-8')
-        if cont == 0:
-                map_1 = folium.Map(location=tweet.geo['coordinates'], zoom_start=4, width=1800, height =1200)
-                cont = cont + 1
-        else:
-            cont = cont + 1
-            map_1.simple_marker(location=tweet.geo['coordinates'],popup=tweet.user.screen_name.encode('utf-8'))   
-            location = geolocator.reverse(tweet.geo['coordinates'],timeout=20)
+        try: 
+			print tweet.geo['coordinates']
+			location = geolocator.reverse(tweet.geo['coordinates'],timeout=20)
+			printout("[ADDRESS:]   ", CYAN)
+			print location.address.encode('utf-8')
+			if cont == 0:
+					map_1 = folium.Map(location=tweet.geo['coordinates'], zoom_start=4, width=1800, height =1200)
+					cont = cont + 1
+			else:
+				cont = cont + 1
+				map_1.simple_marker(location=tweet.geo['coordinates'],popup=tweet.user.screen_name.encode('utf-8'))   
+        except TypeError: print "No Geolocation Data Available"
     if MAPS == "y":
         map_1.create_map(path='maps.html')
     else:
